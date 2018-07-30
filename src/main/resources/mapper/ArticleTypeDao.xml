@@ -1,0 +1,44 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.ArticleTypeDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <select id="sysQueryAll" resultType="ArticleTypePo">
+          select *
+        from article_type
+        order by sort
+    </select>
+    <select id="pageQueryAll" resultType="ArticleTypePo">
+          select *
+        from article_type
+        where status='1'
+         order by sort
+    </select>
+
+    <select id="queryClassifyByCode" resultType="ArticleTypePo">
+        select *
+        from article_type
+        where article_type_code=#{articleTypeCode}
+    </select>
+
+    <insert id="insertArticleType" parameterType="com.course.pojo.ArticleTypePo" useGeneratedKeys="true" keyProperty="articleTypeId">
+        insert into article_type(article_type_name,article_type_code,sort,create_time,create_user,update_time,update_user,status)
+        values(#{articleTypeName},#{articleTypeCode},#{sort},#{createTime},#{createUser},#{updateTime},#{updateUser},'0')
+    </insert>
+
+    <delete id="deleteArticleTypeById">
+        delete  from  article_type where article_type_id=#{articleTypeId}
+    </delete>
+
+    <update id="updateById" parameterType="com.course.pojo.ArticleTypePo">
+        update article_type
+        set article_type_name=#{articleTypeName},
+        article_type_code=#{articleTypeCode},
+        sort=#{sort},
+        update_time=#{updateTime},
+        update_user=#{updateUser},
+        status=#{status}
+        where article_type_id=#{articleTypeId}
+    </update>
+
+</mapper>

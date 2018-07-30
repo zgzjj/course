@@ -1,0 +1,64 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.UserDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <select id="queryById" resultType="UserPo" parameterType="long">
+        select *
+        from course_user
+        where user_id=#{userId}
+    </select>
+    <select id="queryAll" resultType="UserPo">
+        select *
+        from course_user
+    </select>
+    <select id="queryByNameAndPwd" resultType="UserPo" parameterType="String">
+        select *
+        from course_user
+        where user_name=#{userName} and user_pwd=#{userPwd} and status='1'
+    </select>
+
+    <select id="queryByName" resultType="UserPo" parameterType="String">
+        select *
+        from course_user
+        where user_name=#{userName}
+    </select>
+    <insert id="insertUser" parameterType="com.course.pojo.UserPo" useGeneratedKeys="true" keyProperty="userId">
+        insert into course_user(user_name,user_pwd,create_time,last_login,role_id,status,rank) values(#{userName},#{userPwd},#{createTime},#{createTime},0,'1',2)
+    </insert>
+
+    <update id="updateById" parameterType="com.course.pojo.UserPo">
+        update course_user
+        set user_cn_name=#{userCnName},
+        phone=#{phone},
+         sex=#{sex},
+          address=#{address},
+        email=#{email},
+       photo=#{photo},
+        occupation=#{occupation},
+        content=#{content},
+        modify_time=#{modifyTime}
+        where user_id=#{userId}
+    </update>
+    <update id="updateStatus" parameterType="com.course.pojo.UserPo">
+        update course_user
+        set role_id=#{roleId},
+        status=#{status}
+        where user_id=#{userId}
+    </update>
+    <update id="loginRank"  parameterType="com.course.pojo.UserPo">
+        update course_user
+        set rank=rank+2,
+        last_login=#{loginDate}
+        where  user_id=#{userId} and last_login <![CDATA[<]]>#{loginDate}
+    </update>
+
+    <update id="changePwdById" parameterType="com.course.pojo.UserPo">
+        update course_user
+        set  user_pwd=#{userPwd}
+        where  user_id=#{userId}
+    </update>
+    <delete id="deleteById">
+        delete from course_user where user_id=#{userId}
+    </delete>
+</mapper>

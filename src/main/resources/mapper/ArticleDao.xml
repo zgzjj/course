@@ -1,0 +1,114 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.ArticleDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <resultMap id="BaseResultMap" type="HashMap">
+        <result column="article_id" property="articleId"/>
+        <result column="article_name" property="articleName"/>
+        <result column="article_type" property="articleType"/>
+        <result column="classify_name" property="classifyName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="count" property="count"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_cn_name" property="userCnName"/>
+        <result column="photo" property="photo"/>
+    </resultMap>
+    <select id="queryByUser" resultType="ArticlePo" parameterType="long">
+        select *
+        from article
+        where create_user=#{createUser} and status='1'
+    </select>
+    <select id="queryByName" resultType="ArticlePo" parameterType="String">
+        select *
+        from article
+        where course_name=#{courseName}
+    </select>
+    <select id="queryById" resultType="ArticlePo" parameterType="long">
+        select *
+        from article
+        where article_id=#{articleId}
+    </select>
+    <select id="indexQueryByCount" resultType="ArticlePo">
+        select *
+        from article
+        where status='1'
+       order by count desc limit 6
+    </select>
+    <select id="indexQueryCreateTime" resultType="ArticlePo">
+        select *
+        from article
+         where status='1'
+       order by create_time desc limit 6
+    </select>
+    <!--<select id="indexQueryByLevel" resultType="CoursePo">-->
+        <!--select *-->
+        <!--from course-->
+       <!--where course_level='初级' and  status='1'-->
+       <!--order by count desc limit 6-->
+    <!--</select>-->
+    <select id="sysQueryAll" resultType="ArticlePo">
+        select *
+        from article
+    </select>
+    <select id="pageQueryAll"  resultMap="BaseResultMap">
+        select a.article_id,a.article_name,a.article_type,a.classify_name,a.create_time,a.count,b.user_id,b.user_cn_name,b.photo
+        from article a left join course_user b on a.create_user=b.user_id
+        where  a.status='1'
+    </select>
+    <!--<select id="pageQueryByLevel" resultType="ArticlePo" parameterType="String">-->
+        <!--select *-->
+        <!--from course-->
+        <!--where course_level=#{courseLevel} and status='1'-->
+    <!--</select>-->
+    <select id="pageQueryByClassify" resultType="ArticlePo" parameterType="String">
+        select *
+        from article
+        where classify=#{classify} and status='1'
+    </select>
+
+
+    <!--<select id="pageQueryByClassifyAndLevel" resultType="ArticlePo" parameterType="String">-->
+        <!--select *-->
+        <!--from course-->
+        <!--where classify=#{classify} and course_level=#{courseLevel} and status='1'-->
+    <!--</select>-->
+
+
+    <!--<select id="pageQueryBySubClassifyAndLevel" resultType="CoursePo" parameterType="String">-->
+        <!--select *-->
+        <!--from course-->
+        <!--where sub_classify=#{subClassify} and course_level=#{courseLevel} and status='1'-->
+    <!--</select>-->
+
+    <insert id="insertArticle" parameterType="com.course.pojo.ArticlePo" useGeneratedKeys="true" keyProperty="courseId">
+        insert into article(create_user,article_name,article_content,article_type,classify,classify_name,create_time,update_user,modify_time,status,count)
+        values(#{createUser},#{articleName},#{articleContent},#{articleType},#{classify},#{classifyName},#{createTime},#{updateUser},#{modifyTime},'0',0)
+    </insert>
+
+    <delete id="deleteArticle" >
+        delete  from  article where article_id=#{articleId}
+    </delete>
+    <update id="updateById" parameterType="com.course.pojo.ArticlePo">
+        update article
+        set article_name=#{articleName},
+        article_content=#{articleContent},
+        article_type=#{articleType},
+        classify=#{classify},
+        classify_name=#{classifyName},
+        update_user=#{updateUser},
+        modify_time=#{modifyTime},
+        where article_id=#{articleId}
+    </update>
+    <update id="updateCount" parameterType="long">
+        update article
+        set count=count+1
+        where article_id=#{articleId}
+    </update>
+
+    <update id="changeStatus" parameterType="com.course.pojo.ArticlePo">
+        update article
+        set  status=#{status}
+        where  article_id=#{articleId}
+    </update>
+</mapper>

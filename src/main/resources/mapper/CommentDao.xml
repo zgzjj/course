@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.CommentDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <resultMap id="BaseResultMap" type="HashMap">
+        <result column="comment_id" property="commentId"/>
+        <result column="comment_content" property="commentContent"/>
+        <result column="create_time" property="createTime"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_cn_name" property="userCnName"/>
+        <result column="photo" property="photo"/>
+    </resultMap>
+    <select id="queryByIdAndType"   resultMap="BaseResultMap" parameterType="com.course.pojo.CommentPo">
+        select a.comment_id,a.user_id,a.comment_content,a.create_time,b.user_cn_name,b.photo
+        from comment a left join course_user b on a.user_id=b.user_id
+        where a.resource_id=#{resourceId} and a.resource_type=#{resourceType}
+    </select>
+    <insert id="insertComment" parameterType="com.course.pojo.CommentPo" useGeneratedKeys="true" keyProperty="commentId">
+        insert into comment(user_id,resource_id,resource_type,comment_content,create_time) values(#{userId},#{resourceId},#{resourceType},#{commentContent},#{createTime})
+    </insert>
+
+    <delete id="deleteComment"  parameterType="com.course.pojo.CommentPo">
+        delete from comment where comment_id=#{commentId}
+    </delete>
+</mapper>

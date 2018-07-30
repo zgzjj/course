@@ -1,0 +1,31 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.CollectionDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <select id="queryByIdAndType" resultType="CollectionPo" parameterType="com.course.pojo.CollectionPo">
+        select *
+        from collection
+        where user_id=#{userId} and resource_id=#{resourceId} and resource_type=#{resourceType}
+    </select>
+    <select id="queryCourseByUserId" resultType="CoursePo">
+        select b.*
+        from collection a
+        left join course b on b.course_id=a.resource_id and b.status='1'
+        where a.user_id=#{userId} and a.resource_type='1'
+    </select>
+    <select id="queryArticleByUserId" resultType="ArticlePo">
+        select b.*
+        from collection a
+        left join article b on b.article_id=a.resource_id and b.status='1'
+        where a.user_id=#{userId} and a.resource_type='2'
+    </select>
+
+    <insert id="insertCollection" parameterType="com.course.pojo.CollectionPo" useGeneratedKeys="true" keyProperty="collectionId">
+        insert into collection(user_id,resource_id,resource_type,create_time) values(#{userId},#{resourceId},#{resourceType},#{createTime})
+    </insert>
+
+    <delete id="deleteCollection"  parameterType="com.course.pojo.CollectionPo">
+        delete from collection where user_id=#{userId} and resource_id=#{resourceId} and resource_type=#{resourceType}
+    </delete>
+</mapper>

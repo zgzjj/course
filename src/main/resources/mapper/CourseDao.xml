@@ -1,0 +1,113 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.CourseDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <select id="queryByUser" resultType="CoursePo" parameterType="long">
+        select *
+        from course
+        where create_user=#{createUser} and status='1'
+    </select>
+    <select id="queryByName" resultType="CoursePo" parameterType="String">
+        select *
+        from course
+        where course_name=#{courseName}
+    </select>
+    <select id="queryById" resultType="CoursePo" parameterType="long">
+        select *
+        from course
+        where course_id=#{courseId}
+    </select>
+    <select id="indexQueryByCount" resultType="CoursePo">
+        select *
+        from course
+        where status='1'
+       order by count desc limit 6
+    </select>
+    <select id="indexQueryCreateTime" resultType="CoursePo">
+        select *
+        from course
+         where status='1'
+       order by create_time desc limit 6
+    </select>
+    <select id="indexQueryByLevel" resultType="CoursePo">
+        select *
+        from course
+       where course_level='初级' and  status='1'
+       order by count desc limit 6
+    </select>
+    <select id="sysQueryAll" resultType="CoursePo">
+        select *
+        from course
+    </select>
+    <select id="pageQueryAll" resultType="CoursePo">
+        select *
+        from course
+       where  status='1'
+    </select>
+    <select id="pageQueryByLevel" resultType="CoursePo" parameterType="String">
+        select *
+        from course
+        where course_level=#{courseLevel} and status='1'
+    </select>
+    <select id="pageQueryByClassify" resultType="CoursePo" parameterType="String">
+        select *
+        from course
+        where classify=#{classify} and status='1'
+    </select>
+    <select id="pageQueryBySubClassify" resultType="CoursePo" parameterType="String">
+        select *
+        from course
+        where sub_classify=#{subClassify} and status='1'
+    </select>
+
+    <select id="pageQueryByClassifyAndLevel" resultType="CoursePo" parameterType="String">
+        select *
+        from course
+        where classify=#{classify} and course_level=#{courseLevel} and status='1'
+    </select>
+
+
+    <select id="pageQueryBySubClassifyAndLevel" resultType="CoursePo" parameterType="String">
+        select *
+        from course
+        where sub_classify=#{subClassify} and course_level=#{courseLevel} and status='1'
+    </select>
+
+    <insert id="insertCourse" parameterType="com.course.pojo.CoursePo" useGeneratedKeys="true" keyProperty="courseId">
+        insert into course(course_name,course_path,course_photo,course_type,course_level,classify,classify_name,sub_classify,sub_classify_name,course_content,create_time,create_user,update_user,status,count)
+        values(#{courseName},#{coursePath},#{coursePhoto},#{courseType},#{courseLevel},#{classify},#{classifyName},#{subClassify},#{subClassifyName},#{courseContent},#{createTime},#{createUser},#{updateUser},'0',0)
+    </insert>
+
+    <delete id="deleteCourse" >
+        delete  from  course where course_id=#{courseId}
+    </delete>
+    <update id="updateById" parameterType="com.course.pojo.CoursePo">
+        update course
+        set course_name=#{courseName},
+        course_path=#{coursePath},
+        course_photo=#{coursePhoto},
+        course_type=#{courseType},
+        course_level=#{courseLevel},
+        classify=#{classify},
+        sub_classify=#{subClassify},
+        classify_name=#{classifyName},
+        sub_classify_name=#{subClassifyName},
+        course_content=#{courseContent},
+        modify_time=#{modifyTime},
+        update_user=#{updateUser},
+        status=#{status}
+        where course_id=#{courseId}
+    </update>
+    <update id="updateCount" parameterType="long">
+        update course
+        set count=count+1
+        where course_id=#{courseId}
+    </update>
+
+    <update id="changeStatus" parameterType="com.course.pojo.CoursePo">
+        update course
+        set  status=#{status}
+        where  course_id=#{courseId}
+    </update>
+</mapper>

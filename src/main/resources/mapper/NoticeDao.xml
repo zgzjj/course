@@ -1,0 +1,33 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.NoticeDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <select id="queryAll" resultType="NoticePo">
+        select *
+        from notice
+    </select>
+    <select id="queryByStatus" resultType="NoticePo">
+        select *
+        from notice
+        where status='1'
+    </select>
+    <insert id="insertNotice" parameterType="com.course.pojo.NoticePo" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into notice(user_id,notice_name,notice_content,create_time,modify_time,status)
+        values(#{userId},#{noticeName},#{noticeContent},#{createTime},#{modifyTime},'0')
+    </insert>
+
+    <update id="updateNotice"  parameterType="com.course.pojo.NoticePo">
+        update notice
+        set user_id=#{userId},
+        notice_name=#{noticeName},
+        notice_content=#{noticeContent},
+        create_time=#{createTime},
+        modify_time=#{modifyTime},
+        status=#{status}
+        where notice_id=#{noticeId}
+    </update>
+    <delete id="deleteNotice"  parameterType="long">
+        delete from notice where notice_id=#{noticeId}
+    </delete>
+</mapper>

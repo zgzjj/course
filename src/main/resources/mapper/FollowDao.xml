@@ -1,0 +1,24 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.FollowDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <select id="queryById" resultType="UserPo" parameterType="long">
+        select b.*
+        from follow a
+        left join course_user b on a.be_follow_user=b.user_id and b.status='1'
+        where a.user_id=#{userId}
+    </select>
+    <select id="isFollow" resultType="FollowPo" parameterType="com.course.pojo.FollowPo">
+        select *
+        from follow
+        where user_id=#{userId}  and be_follow_user=#{beFollowUser}
+    </select>
+    <insert id="insertFollow" parameterType="com.course.pojo.FollowPo" useGeneratedKeys="true" keyProperty="followId">
+        insert into follow(user_id,be_follow_user,create_time) values(#{userId},#{beFollowUser},#{createTime})
+    </insert>
+
+    <delete id="deleteFollow"  parameterType="com.course.pojo.FollowPo">
+        delete from follow where user_id=#{userId} and be_follow_user=#{beFollowUser}
+    </delete>
+</mapper>
