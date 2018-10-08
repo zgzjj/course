@@ -8,6 +8,8 @@ public interface UserService {
     //查询单个用户信息
     public UserPo getById(long userId);
 
+    public List<UserPo> queryByUserCnName(String userCnName);
+
     public UserPo getByUserNameAndPwd(String userName,String password);
 
     public void register(UserPo userPo);

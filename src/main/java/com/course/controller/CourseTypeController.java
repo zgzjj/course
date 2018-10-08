@@ -44,7 +44,7 @@ public class CourseTypeController {
 
     @RequestMapping(value = "/insertCourseType", method = RequestMethod.POST)
     @ResponseBody
-    public void insertCourse(@RequestBody  CourseTypePo po, HttpSession session){
+    public void insertCourseType(@RequestBody  CourseTypePo po, HttpSession session){
         UserPo user=(UserPo)session.getAttribute("User");
         po.setCreateUser(user.getUserId());
         Date date = new Date();

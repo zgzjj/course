@@ -22,7 +22,7 @@
     <select id="queryByName" resultType="ArticlePo" parameterType="String">
         select *
         from article
-        where course_name=#{courseName}
+        where article_name like  "%"#{articleName}"%"
     </select>
     <select id="queryById" resultType="ArticlePo" parameterType="long">
         select *
@@ -61,10 +61,10 @@
         <!--from course-->
         <!--where course_level=#{courseLevel} and status='1'-->
     <!--</select>-->
-    <select id="pageQueryByClassify" resultType="ArticlePo" parameterType="String">
-        select *
-        from article
-        where classify=#{classify} and status='1'
+    <select id="pageQueryByClassify" resultMap="BaseResultMap" parameterType="String">
+        select a.article_id,a.article_name,a.article_type,a.classify_name,a.create_time,a.count,b.user_id,b.user_cn_name,b.photo
+        from article a left join course_user b on a.create_user=b.user_id
+        where a.classify=#{classify} and a.status='1'
     </select>
 
 

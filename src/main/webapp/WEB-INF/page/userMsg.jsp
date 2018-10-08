@@ -81,6 +81,7 @@
             height: 178px;
             border-radius: 6px;
             vertical-align:top;
+            border: 1px;
         }
         .box-card {
             width: 80%;
@@ -143,6 +144,7 @@
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
+            <el-button @click="location.href='/api/user/article'" v-if="isLogin"  type="info" size="small" style="float: right;margin-top:14px;margin-right:14px" icon="el-icon-edit" round>写文章</el-button>
             <el-dialog title="修改密码" :visible.sync="dialogPwdVisible" width="400px">
                 <el-form :model="pwdForm" :rules="rules3" ref="pwdForm">
                     <el-form-item label="旧密码" label-width="120px" prop="oldPwd">
@@ -163,7 +165,7 @@
         </div>
         <el-card class="box-card">
             <div style="width:200px;float:left">
-            <img v-if="userInfo.photo" :src="userInfo.photo" class="photo">
+            <img  :src="userInfo.photo" class="photo">
             </div>
             <div  style="width:940px;float:left">
             <span style="font-size: 24px;font-weight:bold;margin-left:8px;line-height:36px">{{userInfo.userCnName}}</span><br/>
@@ -219,15 +221,14 @@
         </el-dialog>
 
         <el-tabs type="border-card" class="box-tabs">
-            <el-tab-pane label="我的课程">
+            <el-tab-pane label="课程收藏">
                 <div  class="collection-card" v-for="(data,index) in collectionCourseList">
                     <img  :src="data.coursePhoto"  class="course-card-img">
                     <a style="float: left;margin-left:20px;margin-top:10px;font-size: 24px;width:800px" @click="window.open('/api/user/courseStudy?courseId='+data.courseId)">{{data.courseName}}</a>
                     <span style="font-size: 13px;margin-top:50px;color: #999;float: left;margin-left:20px;">分类：{{data.classifyName}}&nbsp;&nbsp;-&nbsp;&nbsp;难度：{{data.courseLevel}}&nbsp;&nbsp;-&nbsp;&nbsp;点击量：{{data.count}}</span>
-                    <el-button  icon="el-icon-star-off"  type="text" style="float: right;margin-top: -35px;margin-right: 10px;">取消收藏</el-button>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="我的文章">
+            <el-tab-pane label="文章收藏">
                 <div  class="article-card" v-for="(data,index) in collectionArticleList">
                     <a style="float: left;margin-left:20px;margin-top:10px;font-size: 24px;width:100%" @click="window.open('/api/user/articleContent?articleId='+data.articleId)">{{data.articleName}}</a>
                     <span style="float:left;margin-top:28px;margin-left:2px;font-weight: bold" >{{data.userCnName}}</span>
@@ -239,7 +240,6 @@
                     <img  :src="data.photo"  class="course-card-img"  >
                     <a style="float: left;margin-left:20px;margin-top:10px;font-size: 24px;width:800px"@click="window.open('/api/user/userInfo?userId='+data.userId)">{{data.userCnName}}</a>
                     <span style="font-size: 13px;margin-top:50px;color: #999;float: left;margin-left:20px;">性别：{{data.sex}}&nbsp;&nbsp;-&nbsp;&nbsp;居住地：{{data.address}}&nbsp;&nbsp;-&nbsp;&nbsp;简介：{{data.content}}</span>
-                    <el-button  icon="el-icon-star-off"  type="text" style="float: right;margin-top: -35px;margin-right: 10px;">取消关注</el-button>
                 </div>
             </el-tab-pane>
         </el-tabs>

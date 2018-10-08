@@ -212,6 +212,7 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
+        <el-button @click="location.href='/api/user/article'" v-if="isLogin"  type="info" size="small" style="float: right;margin-top:14px;margin-right:14px" icon="el-icon-edit" round>写文章</el-button>
         <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="400px">
             <el-form :model="form" :rules="rules" ref="form">
                 <el-form-item label="用户名" label-width="80px" prop="username">
@@ -403,6 +404,7 @@
                     self.courseInfo=res.data;
                     self.getCourseTeacher();
                     self.getCommnet();
+                    self.isCollection();
                 });
             },
             setItem:function(){

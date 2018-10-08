@@ -7,7 +7,7 @@ import java.util.List;
 public interface CourseService {
     public CoursePo queryById(long courseId);
     //通过名称查询课程
-    public CoursePo queryByName(String courseName);
+    public  List<CoursePo> queryByName(String courseName);
     //通过上传者ID查询课程
     public List<CoursePo> queryByUser(long createUser);
     //点击量增加

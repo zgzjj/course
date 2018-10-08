@@ -13,7 +13,7 @@ public interface CourseDao {
     //通过上传者ID查询课程
     public List<CoursePo> queryByUser(long createUser);
     //通过名称查询课程
-    public CoursePo queryByName(String courseName);
+    public List<CoursePo> queryByName(String courseName);
     //查询所有课程
     public List<CoursePo> sysQueryAll();
 

@@ -44,6 +44,10 @@
             opacity: 0.75;
             margin: 0;
         }
+        .picture{
+            width:100%;
+            height: 520px;
+        }
         .img-header{
             float: right;
             margin-top: 10px;
@@ -161,7 +165,7 @@
     <div>
         <el-carousel indicator-position="outside" height="460px">
             <el-carousel-item v-for="(img,index) in imgList" :key="index">
-               <img v-bind:src="img.url">
+               <img v-bind:src="img.url" class="picture">
             </el-carousel-item>
         </el-carousel>
     </div>
@@ -234,13 +238,7 @@
             return {
                 contextPath:"",
                 userInfo:{},
-                imgList:[
-                    {url: '/resources/images/c1.jpg'},
-                    {url: '/resources/images/c2.jpg'},
-                    {url: '/resources/images/c3.jpg'},
-                    {url: '/resources/images/c4.jpg'},
-                    {url: '/resources/images/c5.jpg'}
-                ],
+                imgList:[],
                 newCourseList:[],
                 hotCourseList:[],
                 easyCourseList:[],
@@ -306,9 +304,16 @@
             },
             initData:function () {
                 var self=this;
+                self.getPicture()
                 self.getCourse()
                 self.checkLogin()
                 self.getNotice()
+            },
+            getPicture:function(){
+                var self=this;
+                axios.get(this.contextPath+"api/mainPicture/pageQuery").then(function(res){
+                    self.imgList=res.data;
+                });
             },
             getCourse:function(){
                 var self=this;

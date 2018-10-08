@@ -23,6 +23,7 @@ import java.util.UUID;
 public class UserController {
     @Autowired
     private UserService userService;
+    private static String localPath="F:\\IDEA-workspace\\course\\src\\main\\webapp\\resources\\images\\user\\";
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String getIndex(){
@@ -31,6 +32,10 @@ public class UserController {
     @RequestMapping(value = "/main", method = RequestMethod.GET)
     public String getMain(){
         return "main";
+    }
+    @RequestMapping(value = "/mainPicture", method = RequestMethod.GET)
+    public String getMainPicture(){
+        return "mainPictureList";
     }
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public String getUserInfo(){
@@ -59,6 +64,10 @@ public class UserController {
     @RequestMapping(value = "/articlePage", method = RequestMethod.GET)
     public String getArticlePage(){
         return "articlePage";
+    }
+    @RequestMapping(value = "/articleList", method = RequestMethod.GET)
+    public String getArticleList(){
+        return "articleList";
     }
     @RequestMapping(value = "/articleContent", method = RequestMethod.GET)
     public String getArticleContent(){
@@ -115,9 +124,14 @@ public class UserController {
              return "fail";
          }
     }
+    @RequestMapping(value = "/queryByUserCnName", method = RequestMethod.GET)
+    @ResponseBody
+    public List<UserPo> queryByUserCnName(@RequestParam String userCnName){
+        return  userService.queryByUserCnName(userCnName);
+    }
     @RequestMapping(value = "/register/{userName}/{password}/{createTime}", method = RequestMethod.GET)
     @ResponseBody
-    public String  login(@PathVariable("userName") String userName,@PathVariable("password") String password,@PathVariable("createTime") String createTime){
+    public String  insertUser(@PathVariable("userName") String userName,@PathVariable("password") String password,@PathVariable("createTime") String createTime){
         UserPo po=new UserPo();
         po.setUserName(userName);
         po.setUserPwd(password);
@@ -175,7 +189,6 @@ public class UserController {
             HttpServletResponse response){
         String sqlPath = null;
         String filename=null;
-        String localPath="F:\\IDEA-workspace\\course\\src\\main\\webapp\\resources\\images\\user\\";
         String uuid = UUID.randomUUID().toString().replaceAll("-","");
         String contentType=multipartFile.getContentType();
         String suffixName=contentType.substring(contentType.indexOf("/")+1);

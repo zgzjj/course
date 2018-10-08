@@ -8,6 +8,11 @@
         from course_user
         where user_id=#{userId}
     </select>
+    <select id="queryByUserCnName" resultType="UserPo" parameterType="String">
+        select *
+        from course_user
+        where user_cn_name LIKE  "%"#{userCnName}"%"
+    </select>
     <select id="queryAll" resultType="UserPo">
         select *
         from course_user
@@ -24,7 +29,7 @@
         where user_name=#{userName}
     </select>
     <insert id="insertUser" parameterType="com.course.pojo.UserPo" useGeneratedKeys="true" keyProperty="userId">
-        insert into course_user(user_name,user_pwd,create_time,last_login,role_id,status,rank) values(#{userName},#{userPwd},#{createTime},#{createTime},0,'1',2)
+        insert into course_user(user_name,user_pwd,create_time,last_login,role_id,status,rank) values(#{userName},#{userPwd},#{createTime},#{createTime},1,'1',2)
     </insert>
 
     <update id="updateById" parameterType="com.course.pojo.UserPo">

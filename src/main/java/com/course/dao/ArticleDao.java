@@ -15,7 +15,7 @@ public interface ArticleDao {
     //通过上传者ID查询文章
     public List<ArticlePo> queryByUser(long createUser);
     //通过名称查询文章
-    public ArticlePo queryByName(String articleName);
+    public List<ArticlePo> queryByName(String articleName);
     //查询所有文章
     public List<ArticlePo> sysQueryAll();
 
@@ -27,7 +27,7 @@ public interface ArticleDao {
     public  List<Map> pageQueryAll();
 
     //通过类别查询文章
-    public  List<ArticlePo> pageQueryByClassify(String classify);
+    public  List<Map> pageQueryByClassify(String classify);
 
     //添加文章
     public void insertArticle(ArticlePo po);

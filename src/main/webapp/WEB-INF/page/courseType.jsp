@@ -122,7 +122,7 @@
                     >
                         <template slot-scope="scope">
                             <el-button @click="changeArticleTypeForm(scope.row)" type="text" size="small">修改</el-button>
-                            <el-button type="text" size="small"  @click="deleteMsg(scope.row)">删除</el-button>
+                            <el-button type="text" size="small"  @click="deleteArticleType(scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -540,6 +540,14 @@
                     self.$message({message:'修改成功！', type: 'success'});
                 });
             },
+            changeArticleType:function(){
+                var self=this;
+                axios.put(this.contextPath+"api/articleType/updateArticleType",self.articleTypeChangeData).then(function(res){
+                    self.articleTypeChangeForm = false
+                    self.getArticleType()
+                    self.$message({message:'修改成功！', type: 'success'});
+                });
+            },
             submitForm(formName) {
                 var self=this;
                 this.$refs[formName].validate((valid) => {
@@ -573,11 +581,40 @@
                     }
                 });
             },
+            submitArticleTypeChangeForm(formName ){
+                var self=this;
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        self.changeArticleType();
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
             resetForm(formName) {
                 var self=this
                 self.$refs[formName].resetFields();
                 self.classifyChangeForm=false
                 self.subClassifyChangeForm = false
+            },
+            deleteArticleType:function(row){
+                var self=this;
+                this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    axios.get(this.contextPath+"api/articleType/deleteById/"+row.articleTypeId).then(function(res){
+                        self.getArticleType()
+                        self.$message({message:'操作成功！', type: 'success'});
+                    });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             deleteMsg:function(row){
                 var self=this;

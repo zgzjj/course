@@ -140,6 +140,7 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
+        <el-button @click="location.href='/api/user/article'" v-if="isLogin"  type="info" size="small" style="float: right;margin-top:14px;margin-right:14px" icon="el-icon-edit" round>写文章</el-button>
         <el-dialog title="用户登录" :visible.sync="dialogFormVisible" width="400px">
             <el-form :model="form" :rules="rules" ref="form">
                 <el-form-item label="用户名" label-width="80px" prop="username">
@@ -191,8 +192,16 @@
         </el-dialog>
     </div>
     <div id="main">
-        <el-tabs tab-position="left" >
-            <el-tab-pane  v-for="(item, index) in articleTypeList" :key="index" :label="item.articleTypeName" >
+        <el-tabs tab-position="left" @tab-click="handleClick">
+            <el-tab-pane   label="全部">
+                <div  class="article-card" v-for="(data,index) in articleList">
+                    <a style="float: left;margin-left:20px;margin-top:10px;font-size: 24px;width:100%" @click="window.open('/api/user/articleContent?articleId='+data.articleId)">{{data.articleName}}</a>
+                    <img  :src="data.photo"  class="course-teacher"  @click="window.open('/api/user/userInfo?userId='+data.userId)">
+                    <span style="float:left;margin-top:28px;margin-left:2px;font-weight: bold" >{{data.userCnName}}</span>
+                    <span style="font-size: 13px;margin-top:30px;color: #999;float: left;margin-left:20px;">{{data.createTime}}&nbsp;&nbsp;&nbsp;&nbsp;类型：{{data.articleType}}&nbsp;&nbsp;-&nbsp;&nbsp;分类：{{data.classifyName}}&nbsp;&nbsp;-&nbsp;&nbsp;阅读：{{data.count}}</span>
+                </div>
+            </el-tab-pane>
+            <el-tab-pane  v-for="(item, index) in articleTypeList"  :name="item.articleTypeCode" :label="item.articleTypeName">
                 <div  class="article-card" v-for="(data,index) in articleList">
                     <a style="float: left;margin-left:20px;margin-top:10px;font-size: 24px;width:100%" @click="window.open('/api/user/articleContent?articleId='+data.articleId)">{{data.articleName}}</a>
                     <img  :src="data.photo"  class="course-teacher"  @click="window.open('/api/user/userInfo?userId='+data.userId)">
@@ -275,7 +284,7 @@
                 var self=this;
                 self.checkLogin();
                 self.getArticleType();
-                self.getArticle();
+                self.getAllArticle();
             },
 
             getArticleType:function(){
@@ -284,9 +293,21 @@
                     self.articleTypeList=res.data
                 });
             },
-            getArticle:function(){
+            getAllArticle:function(){
                 var self=this;
                 axios.get(this.contextPath+"api/article/pageArticleList").then(function(res){
+                    self.articleList=res.data
+                });
+            },
+            getAllArticle:function(){
+                var self=this;
+                axios.get(this.contextPath+"api/article/pageArticleList").then(function(res){
+                    self.articleList=res.data
+                });
+            },
+            getArticleByType:function(type){
+                var self=this;
+                axios.get(this.contextPath+"api/article/pageQueryByClassify/"+type).then(function(res){
                     self.articleList=res.data
                 });
             },
@@ -408,6 +429,14 @@
                     self.isLogin=res.data;
                     location.href='/api/user/main'
                 });
+            },
+            handleClick(tab, event) {
+                var self=this;
+                if(tab.name){
+                    self.getArticleByType(tab.name)
+                }else{
+                    self.getAllArticle()
+                }
             },
             handleCommand(command) {
                 var self=this;

@@ -16,7 +16,9 @@ public class UserServiceImpl implements UserService{
         return userDao.queryById(userId);
     }
 
-
+    public List<UserPo> queryByUserCnName(String userCnName){
+        return userDao.queryByUserCnName(userCnName);
+    }
     public UserPo getByUserNameAndPwd(String userName, String password) {
         return userDao.queryByNameAndPwd(userName,password);
     }

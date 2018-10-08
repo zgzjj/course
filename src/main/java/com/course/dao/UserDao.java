@@ -9,9 +9,10 @@ public interface UserDao {
     //通过用户名密码查询用户
     public UserPo queryByNameAndPwd(@Param("userName")  String userName,@Param("userPwd")  String userPwd);
 
-    //通过I的查询用户
+    //通过Id的查询用户
     public UserPo queryById(long userId);
 
+    public List<UserPo> queryByUserCnName(String userCnName);
     //查询所有用户
     public List<UserPo> queryAll();
 

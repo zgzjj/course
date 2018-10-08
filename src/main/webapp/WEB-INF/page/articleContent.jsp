@@ -393,6 +393,7 @@
                     document.getElementById("content").innerHTML=res.data.articleContent
                     self.getCourseTeacher();
                     self.getCommnet();
+                    self.isCollection();
                 });
             },
             setItem:function(){

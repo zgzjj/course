@@ -49,6 +49,11 @@
         }
         .img-header img{
             border-radius:50%;
+            height: 80px;
+            width: 180px;
+        }
+        .picture{
+            border-radius:10%;
             height: 40px;
             width: 40px;
         }
@@ -65,14 +70,14 @@
         .avatar-uploader-icon {
             font-size: 28px;
             color: #8c939d;
-            width: 80px;
-            height: 80px;
-            line-height: 80px;
+            width: 360px;
+            height: 180px;
+            line-height: 180px;
             text-align: center;
         }
         .avatar {
-            width: 80px;
-            height: 80px;
+            width: 360px;
+            height: 180px;
             display: block;
         }
         .box-card {
@@ -95,33 +100,51 @@
 <div id="app" v-cloak>
     <div id="main">
             <el-row :gutter="20">
-                <el-col :span="6">
-                <el-input v-model="noticeName" placeholder="输入公告名"></el-input>
-                </el-col>
-                <el-button type="primary" @click="search">搜索</el-button>
-                <el-button type="primary"  @click="openForm">添加公告</el-button>
+                <el-button type="primary"@click="openInsertForm">新增轮播图</el-button>
             </el-row>
-        <el-dialog title="添加公告" :visible.sync="dialogFormVisible" width="600px">
-            <el-form :model="form"  ref="form">
-                <el-form-item label="公告名称":label-width="formLabelWidth" prop="courseName">
-                    <el-input v-model="form.noticeName" auto-complete="off"></el-input>
+        <el-dialog title="新增轮播图" :visible.sync="dialogFormVisible">
+            <el-form :model="form">
+                <el-form-item label="轮播图":label-width="formLabelWidth" >
+                    <el-upload
+                            class="avatar-uploader"
+                            action="/api/mainPicture/uploadImg"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="form.url" :src="form.url" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
-                <el-form-item label="公告内容" :label-width="formLabelWidth" prop="courseContent">
-                    <el-input type="textarea" v-model="form.noticeContent"></el-input>
+                <el-form-item label="顺序" :label-width="formLabelWidth">
+                    <el-slider
+                            v-model="form.sort"
+                            show-input>
+                    </el-slider>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false" >取 消</el-button>
-                <el-button type="primary"  @click="submitForm('form')">确 定</el-button>
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="insertPicture">保 存</el-button>
             </div>
         </el-dialog>
-        <el-dialog title="修改课程" :visible.sync="dialogChangeFormVisible" width="600px">
+        <el-dialog title="轮播图设置" :visible.sync="dialogChangeFormVisible" width="600px">
             <el-form :model="form"   ref="form">
-                <el-form-item label="公告名称":label-width="formLabelWidth" prop="courseName">
-                    <el-input v-model="form.noticeName" auto-complete="off"></el-input>
+                <el-form-item label="轮播图":label-width="formLabelWidth" >
+                    <el-upload
+                            class="avatar-uploader"
+                            action="/api/mainPicture/uploadImg"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="form.url" :src="form.url" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
                 </el-form-item>
-                <el-form-item label="公告内容" :label-width="formLabelWidth" prop="courseContent">
-                    <el-input type="textarea" v-model="form.noticeContent"></el-input>
+                <el-form-item label="顺序" :label-width="formLabelWidth">
+                    <el-slider
+                            v-model="form.sort"
+                            show-input>
+                    </el-slider>
                 </el-form-item>
                 <el-form-item label="审核状态" :label-width="formLabelWidth">
                     <el-switch
@@ -134,42 +157,61 @@
                     </el-tooltip>
                 </el-form-item>
             </el-form>
-
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogChangeFormVisible = false" >取 消</el-button>
-                <el-button type="primary"  @click="changeNotice">确 定</el-button>
+                <el-button type="primary"  @click="changePicture">确 定</el-button>
             </div>
         </el-dialog>
             <el-table
                     :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                     style="width: 100%">
                 <el-table-column
-                        prop="noticeName"
-                        label="公告名称"
-                       >
+                        label="轮播图"
+                        align="center"
+                >
+                    <template slot-scope="scope">
+                        <img v-if="scope.row.url" :src="scope.row.url" class="picture">
+                    </template>
                 </el-table-column>
                 <el-table-column
-                        prop="noticeContent"
-                        label="公告内容"
-                        >
+                        prop="url"
+                        label="图片路径"
+                        align="center"
+                       >
+                </el-table-column>
+
+                <el-table-column
+                        prop="sort"
+                        label="轮播顺序"
+                        align="center"
+                >
                 </el-table-column>
                 <el-table-column
                         prop="createTime"
-                        label="创建时间"
+                        label="上传时间"
+                        align="center"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="modifyTime"
+                        label="修改时间"
+                        align="center"
                 >
                 </el-table-column>
                 <el-table-column
                         label="审核状态"
                         prop="status"
+                        align="center"
                 >
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status==1">启用</el-tag>
-                        <el-tag  v-if="scope.row.status==0" type="danger">未启用</el-tag>
+                        <el-tag v-if="scope.row.status==1">使用中</el-tag>
+                        <el-tag  v-if="scope.row.status==0" type="danger">未使用</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column
                         fixed="right"
                         label="操作"
+                        align="center"
                        >
                     <template slot-scope="scope">
                         <el-button @click="openChangeForm(scope.row)" type="text" size="small">修改</el-button>
@@ -198,7 +240,7 @@
                 dialogFormVisible:false,
                 dialogChangeFormVisible:false,
                 formLabelWidth:'120px',
-                noticeName:'',
+                course:'',
                 tableData: [
                 ],
                 form: {
@@ -217,17 +259,14 @@
             },
             initData:function () {
                 var self=this;
-                self.getNotice();
+                self.getPicture();
             },
-            search:function(){
+            openInsertForm:function(){
                 var self=this;
-                axios.get(this.contextPath+"api/notice/queryByName?noticeName="+self.noticeName).then(function(res){
-                    self.tableData=res.data;
-                });
-            },
-            openForm:function(){
-                var self=this;
-                self.form={}
+                self.form={
+                    url:''
+                }
+                self.imageUrl=""
                 self.dialogFormVisible=true
             },
             openChangeForm:function(row){
@@ -235,41 +274,18 @@
                 self.form=row;
                 self.dialogChangeFormVisible=true
             },
-            insertNotice:function(){
+            getPicture:function(){
                 var self=this;
-                axios.post(this.contextPath+"api/notice/insertNotice",self.form).then(function(res){
-                    self.$message({message:'添加成功！', type: 'success'});
-                    self.dialogFormVisible=false
-                    self.getNotice();
-                });
-            },
-            changeNotice:function(){
-                var self=this;
-                axios.put(this.contextPath+"api/notice/updateNotice",self.form).then(function(res){
-                    self.$message({message:'修改成功！', type: 'success'});
-                    self.dialogChangeFormVisible=false
-                    self.getNotice();
-                });
-            },
-            getNotice:function(){
-                var self=this;
-                axios.get(this.contextPath+"api/notice/queryAll").then(function(res){
+                axios.get(this.contextPath+"api/mainPicture/sysQuery").then(function(res){
                     self.tableData=res.data;
                 });
             },
-            submitForm(formName) {
-                var self=this;
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        self.insertNotice();
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+            handleFileSuccess(res, file){
+                this.form.coursePath = res;
             },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = res;
+                this.form.url = this.imageUrl;
             },
             deleteMsg:function(row){
                 var self=this;
@@ -278,8 +294,8 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.get(this.contextPath+"api/notice/deleteNotice/"+row.noticeId).then(function(res){
-                        self.getNotice();
+                    axios.post(this.contextPath+"api/mainPicture/deletePicture",row).then(function(res){
+                        self.getPicture();
                         self.$message({message:'操作成功！', type: 'success'});
                     });
                 }).catch(() => {
@@ -288,6 +304,34 @@
                         message: '已取消删除'
                     });
                 });
+            },
+            insertPicture:function(){
+                var self=this;
+                axios.post(this.contextPath+"api/mainPicture/insertPicture",self.form).then(function(res){
+                    self.dialogFormVisible = false
+                    self.$message({message:'新增成功！', type: 'success'});
+                    self.getPicture()
+                });
+            },
+            changePicture:function(){
+                var self=this;
+                axios.put(this.contextPath+"api/mainPicture/updatePicture",self.form).then(function(res){
+                    self.dialogChangeFormVisible = false
+                    self.$message({message:'修改成功！', type: 'success'});
+                    self.getPicture()
+                });
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
             },
             current_change:function(currentPage){
                 this.currentPage = currentPage;

@@ -98,9 +98,9 @@
     <div id="main">
             <el-row :gutter="20">
                 <el-col :span="6">
-                <el-input v-model="user" placeholder="输入用户"></el-input>
+                <el-input v-model="userCnName" placeholder="输入用户昵称"></el-input>
                 </el-col>
-                <el-button type="primary">搜索</el-button>
+                <el-button type="primary" @click="search">搜索</el-button>
             </el-row>
             <el-table
                     :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
@@ -147,8 +147,7 @@
 
                 >
                     <template slot-scope="scope"   >
-                        <el-tag type="info" v-if="scope.row.roleId==0">普通用户</el-tag>
-                        <el-tag type="success"  v-if="scope.row.roleId==1">教师用户</el-tag>
+                        <el-tag type="success"  v-if="scope.row.roleId==1">普通用户</el-tag>
                         <el-tag  v-if="scope.row.roleId==2">管理员用户</el-tag>
                     </template>
                 </el-table-column>
@@ -232,10 +231,6 @@
                 role:[
                     {
                         label:"普通用户",
-                        value:"0",
-                    },
-                    {
-                        label:"教师用户",
                         value:"1",
                     },
                     {
@@ -243,7 +238,7 @@
                         value:"2",
                     }
                 ],
-                user:'',
+                userCnName:'',
                 pagesize:10,//每页的数据条数
                 currentPage:1,//默认开始页面
             };
@@ -260,10 +255,15 @@
                 var self=this;
                 self.getUserList();
             },
+            search:function(){
+                var self=this;
+                axios.get(this.contextPath+"api/user/queryByUserCnName?userCnName="+self.userCnName).then(function(res){
+                    self.tableData=res.data
+                });
+            },
             getUserList:function(){
                 var self=this;
                 axios.get(this.contextPath+"api/user/queryList").then(function(res){
-
                     self.tableData=res.data
                 });
             },

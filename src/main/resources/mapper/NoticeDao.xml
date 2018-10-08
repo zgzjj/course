@@ -12,6 +12,11 @@
         from notice
         where status='1'
     </select>
+    <select id="queryByName" resultType="NoticePo" parameterType="String">
+        select *
+        from notice
+        where notice_name like  "%"#{noticeName}"%"
+    </select>
     <insert id="insertNotice" parameterType="com.course.pojo.NoticePo" useGeneratedKeys="true" keyProperty="noticeId">
         insert into notice(user_id,notice_name,notice_content,create_time,modify_time,status)
         values(#{userId},#{noticeName},#{noticeContent},#{createTime},#{modifyTime},'0')

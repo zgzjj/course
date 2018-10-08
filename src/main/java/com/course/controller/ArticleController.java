@@ -42,14 +42,39 @@ public class ArticleController {
     public List<ArticlePo> sysQueryAll(){
         return articleService.sysQueryAll();
     }
+
     @RequestMapping(value = "/pageArticleList", method = RequestMethod.GET)
     @ResponseBody
     public List<Map> pageQueryAll(){
             return articleService.pageQueryAll();
     }
+
+    @RequestMapping(value = "/pageQueryByClassify/{classify}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map> pageQueryByClassify(@PathVariable String classify){
+        return articleService.pageQueryByClassify(classify);
+    }
+
     @RequestMapping(value = "/queryById/{articleId}", method = RequestMethod.GET)
     @ResponseBody
     public ArticlePo queryById(@PathVariable long articleId){
+        articleService.updateCount(articleId);
         return articleService.queryById(articleId);
+    }
+
+    @RequestMapping(value = "/queryByName", method = RequestMethod.GET)
+    @ResponseBody
+    public List<ArticlePo> queryByName(@RequestParam String articleName){
+        return articleService.queryByName(articleName);
+    }
+    @RequestMapping(value = "/changeStatus", method = RequestMethod.PUT)
+    @ResponseBody
+    public void changeStatus(@RequestBody ArticlePo po){
+        articleService.changeStatus(po);
+    }
+    @RequestMapping(value = "/deleteById/{articleId}", method = RequestMethod.GET)
+    @ResponseBody
+    public void deleteById(@PathVariable long articleId){
+        articleService.deleteArticle(articleId);
     }
 }

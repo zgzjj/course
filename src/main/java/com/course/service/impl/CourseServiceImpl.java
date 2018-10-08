@@ -19,7 +19,7 @@ public class CourseServiceImpl implements CourseService {
     public void updateCount(long courseId){
         courseDao.updateCount(courseId);
     }
-    public CoursePo queryByName(String courseName) {
+    public  List<CoursePo> queryByName(String courseName) {
         return courseDao.queryByName(courseName);
     }
 

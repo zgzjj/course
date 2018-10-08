@@ -9,6 +9,8 @@ public interface NoticeService {
 
     public List<NoticePo> queryByStatus();
 
+    public List<NoticePo> queryByName(String noticeName);
+
     public void insertNotice(NoticePo po);
 
     public void updateNotice(NoticePo po);

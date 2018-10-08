@@ -96,9 +96,9 @@
     <div id="main">
             <el-row :gutter="20">
                 <el-col :span="6">
-                <el-input v-model="course" placeholder="输入课程名"></el-input>
+                <el-input v-model="courseName" placeholder="输入课程名"></el-input>
                 </el-col>
-                <el-button type="primary">搜索</el-button>
+                <el-button type="primary" @click="search">搜索</el-button>
                 <el-button type="primary"  @click="openForm">添加课程</el-button>
             </el-row>
         <el-dialog title="添加课程" :visible.sync="dialogFormVisible" width="600px">
@@ -303,7 +303,7 @@
                         value:'高级',
                     }
                 ],
-                course:'',
+                courseName:'',
                 rules:{
                     courseName: [
                         { required: true, message: '请输入课程名称', trigger: 'blur' },
@@ -332,6 +332,12 @@
                 var self=this;
                 self.getClassify();
                 self.getCourse();
+            },
+            search:function(){
+                var self=this;
+                axios.get(this.contextPath+"api/course/queryByName?courseName="+self.courseName).then(function(res){
+                    self.tableData=res.data;
+                });
             },
             openForm:function(){
                 var self=this;

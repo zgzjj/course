@@ -11,7 +11,7 @@
     <select id="queryByName" resultType="CoursePo" parameterType="String">
         select *
         from course
-        where course_name=#{courseName}
+        where course_name like "%"#{courseName}"%"
     </select>
     <select id="queryById" resultType="CoursePo" parameterType="long">
         select *

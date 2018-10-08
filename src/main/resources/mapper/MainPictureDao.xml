@@ -1,0 +1,35 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.course.dao.MainPictureDao">
+    <!--为dao接口方法提供sql语句配置-->
+    <select id="queryById" resultType="MainPicturePo" parameterType="long">
+        select *
+        from main_picture
+        where picture_id=#{pictureId}
+    </select>
+    <select id="sysQuery" resultType="MainPicturePo">
+        select *
+        from main_picture order by status desc
+    </select>
+    <select id="pageQuery" resultType="MainPicturePo" >
+        select *
+        from main_picture
+        where status='1' order by sort
+    </select>
+    <insert id="insertPicture" parameterType="com.course.pojo.MainPicturePo" useGeneratedKeys="true" keyProperty="pictureId">
+        insert into main_picture(url,sort,create_time,status) values(#{url},#{sort},#{createTime},'0')
+    </insert>
+
+    <update id="updatePicture" parameterType="com.course.pojo.MainPicturePo">
+        update main_picture
+        set  url=#{url},
+        sort=#{sort},
+        status=#{status},
+        modify_time=#{modifyTime}
+        where  picture_id=#{pictureId}
+    </update>
+    <delete id="deletePicture"  parameterType="com.course.pojo.MainPicturePo">
+        delete from main_picture where picture_id=#{pictureId}
+    </delete>
+</mapper>

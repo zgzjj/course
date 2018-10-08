@@ -26,7 +26,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.queryByUser(createUser);
     }
 
-    public ArticlePo queryByName(String articleName) {
+    public List<ArticlePo> queryByName(String articleName) {
         return articleDao.queryByName(articleName);
     }
 
@@ -46,7 +46,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.pageQueryAll();
     }
 
-    public List<ArticlePo> pageQueryByClassify(String classify) {
+    public List<Map> pageQueryByClassify(String classify) {
         return articleDao.pageQueryByClassify(classify);
     }
 

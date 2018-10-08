@@ -63,6 +63,7 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
+        <el-button @click="location.href='/api/user/article'" v-if="isLogin"  type="info" size="small" style="float: right;margin-top:14px;margin-right:14px" icon="el-icon-edit" round>写文章</el-button>
         <el-dialog title="修改密码" :visible.sync="dialogPwdVisible" width="400px">
             <el-form :model="pwdForm" :rules="rules3" ref="pwdForm">
                 <el-form-item label="旧密码" label-width="120px" prop="oldPwd">
@@ -97,7 +98,7 @@
                     <i class="el-icon-setting"></i>
                     <span slot="title">课程管理</span>
                 </el-menu-item>
-                <el-menu-item index="3">
+                <el-menu-item index="3" @click="mainUrl='/api/user/articleList'">
                     <i class="el-icon-setting"></i>
                     <span slot="title" >文章管理</span>
                 </el-menu-item>
@@ -105,13 +106,13 @@
                     <i class="el-icon-setting"></i>
                     <span slot="title">类型管理</span>
                 </el-menu-item>
-                <el-menu-item index="5">
-                    <i class="el-icon-setting"></i>
-                    <span slot="title">广告管理</span>
-                </el-menu-item>
-                <el-menu-item index="6" @click="mainUrl='/api/user/noticeList'" >
+                <el-menu-item index="5" @click="mainUrl='/api/user/noticeList'" >
                     <i class="el-icon-setting"></i>
                     <span slot="title">公告管理</span>
+                </el-menu-item>
+                <el-menu-item index="6" @click="mainUrl='/api/user/mainPicture'" >
+                    <i class="el-icon-setting"></i>
+                    <span slot="title">轮播管理</span>
                 </el-menu-item>
             </el-menu>
         </el-col>

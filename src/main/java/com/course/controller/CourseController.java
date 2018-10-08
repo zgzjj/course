@@ -22,9 +22,10 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @RequestMapping(value = "/queryByName/{courseName}", method = RequestMethod.GET)
+
+    @RequestMapping(value = "/queryByName", method = RequestMethod.GET)
     @ResponseBody
-    public CoursePo queryByName(@PathVariable("courseName") String courseName){
+    public  List<CoursePo> queryByName(@RequestParam String courseName){
         return courseService.queryByName(courseName);
     }
     @RequestMapping(value = "/queryByUser/{createUser}", method = RequestMethod.GET)

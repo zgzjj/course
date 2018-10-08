@@ -27,6 +27,13 @@ public class NoticeController {
     public List<NoticePo> queryByStatus(){
         return noticeService.queryByStatus();
     }
+
+    @RequestMapping(value = "/queryByName", method = RequestMethod.GET)
+    @ResponseBody
+    public List<NoticePo> queryByName(@RequestParam String noticeName){
+        return noticeService.queryByName(noticeName);
+    }
+
     @RequestMapping(value = "/insertNotice", method = RequestMethod.POST)
     @ResponseBody
     public void insertNotice(@RequestBody NoticePo po, HttpSession session){

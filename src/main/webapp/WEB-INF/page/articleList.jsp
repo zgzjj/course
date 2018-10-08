@@ -96,33 +96,12 @@
     <div id="main">
             <el-row :gutter="20">
                 <el-col :span="6">
-                <el-input v-model="noticeName" placeholder="输入公告名"></el-input>
+                <el-input v-model="articleName" placeholder="输入文章名"></el-input>
                 </el-col>
                 <el-button type="primary" @click="search">搜索</el-button>
-                <el-button type="primary"  @click="openForm">添加公告</el-button>
             </el-row>
-        <el-dialog title="添加公告" :visible.sync="dialogFormVisible" width="600px">
-            <el-form :model="form"  ref="form">
-                <el-form-item label="公告名称":label-width="formLabelWidth" prop="courseName">
-                    <el-input v-model="form.noticeName" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="公告内容" :label-width="formLabelWidth" prop="courseContent">
-                    <el-input type="textarea" v-model="form.noticeContent"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false" >取 消</el-button>
-                <el-button type="primary"  @click="submitForm('form')">确 定</el-button>
-            </div>
-        </el-dialog>
-        <el-dialog title="修改课程" :visible.sync="dialogChangeFormVisible" width="600px">
+        <el-dialog title="文章审核" :visible.sync="dialogChangeFormVisible" width="600px">
             <el-form :model="form"   ref="form">
-                <el-form-item label="公告名称":label-width="formLabelWidth" prop="courseName">
-                    <el-input v-model="form.noticeName" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="公告内容" :label-width="formLabelWidth" prop="courseContent">
-                    <el-input type="textarea" v-model="form.noticeContent"></el-input>
-                </el-form-item>
                 <el-form-item label="审核状态" :label-width="formLabelWidth">
                     <el-switch
                             v-model="form.status"
@@ -134,28 +113,37 @@
                     </el-tooltip>
                 </el-form-item>
             </el-form>
-
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogChangeFormVisible = false" >取 消</el-button>
-                <el-button type="primary"  @click="changeNotice">确 定</el-button>
+                <el-button type="primary"  @click="changeArticle">确 定</el-button>
             </div>
         </el-dialog>
             <el-table
                     :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                     style="width: 100%">
                 <el-table-column
-                        prop="noticeName"
-                        label="公告名称"
+                        prop="articleName"
+                        label="文章名称"
                        >
                 </el-table-column>
                 <el-table-column
-                        prop="noticeContent"
-                        label="公告内容"
+                        prop="articleType"
+                        label="文章类型"
                         >
                 </el-table-column>
                 <el-table-column
+                        prop="classifyName"
+                        label="文章分类"
+                >
+                </el-table-column>
+                <el-table-column
                         prop="createTime"
-                        label="创建时间"
+                        label="上传时间"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="count"
+                        label="浏览次数"
                 >
                 </el-table-column>
                 <el-table-column
@@ -163,8 +151,8 @@
                         prop="status"
                 >
                     <template slot-scope="scope">
-                        <el-tag v-if="scope.row.status==1">启用</el-tag>
-                        <el-tag  v-if="scope.row.status==0" type="danger">未启用</el-tag>
+                        <el-tag v-if="scope.row.status==1">文章上架</el-tag>
+                        <el-tag  v-if="scope.row.status==0" type="danger">文章下架</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -198,9 +186,9 @@
                 dialogFormVisible:false,
                 dialogChangeFormVisible:false,
                 formLabelWidth:'120px',
-                noticeName:'',
                 tableData: [
                 ],
+                articleName:'',
                 form: {
                 },
                 changeForm:{},
@@ -217,59 +205,31 @@
             },
             initData:function () {
                 var self=this;
-                self.getNotice();
-            },
-            search:function(){
-                var self=this;
-                axios.get(this.contextPath+"api/notice/queryByName?noticeName="+self.noticeName).then(function(res){
-                    self.tableData=res.data;
-                });
-            },
-            openForm:function(){
-                var self=this;
-                self.form={}
-                self.dialogFormVisible=true
+                self.getArticle();
             },
             openChangeForm:function(row){
                 var self=this;
                 self.form=row;
                 self.dialogChangeFormVisible=true
             },
-            insertNotice:function(){
+            search:function(){
                 var self=this;
-                axios.post(this.contextPath+"api/notice/insertNotice",self.form).then(function(res){
-                    self.$message({message:'添加成功！', type: 'success'});
-                    self.dialogFormVisible=false
-                    self.getNotice();
-                });
-            },
-            changeNotice:function(){
-                var self=this;
-                axios.put(this.contextPath+"api/notice/updateNotice",self.form).then(function(res){
-                    self.$message({message:'修改成功！', type: 'success'});
-                    self.dialogChangeFormVisible=false
-                    self.getNotice();
-                });
-            },
-            getNotice:function(){
-                var self=this;
-                axios.get(this.contextPath+"api/notice/queryAll").then(function(res){
+                axios.get(this.contextPath+"api/article/queryByName?articleName="+self.articleName).then(function(res){
                     self.tableData=res.data;
                 });
             },
-            submitForm(formName) {
+            getArticle:function(){
                 var self=this;
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        self.insertNotice();
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
+                axios.get(this.contextPath+"api/article/sysArticleList").then(function(res){
+                    self.tableData=res.data;
                 });
             },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
+            handleFileSuccess(res, file){
+                this.form.coursePath = res;
+            },
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = res;
+                this.form.coursePhoto = this.imageUrl;
             },
             deleteMsg:function(row){
                 var self=this;
@@ -278,8 +238,8 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    axios.get(this.contextPath+"api/notice/deleteNotice/"+row.noticeId).then(function(res){
-                        self.getNotice();
+                    axios.get(this.contextPath+"api/article/deleteById/"+row.courseId).then(function(res){
+                        self.getCourse();
                         self.$message({message:'操作成功！', type: 'success'});
                     });
                 }).catch(() => {
@@ -287,6 +247,14 @@
                         type: 'info',
                         message: '已取消删除'
                     });
+                });
+            },
+            changeArticle:function(){
+                var self=this;
+                axios.put(this.contextPath+"api/article/changeStatus",self.form).then(function(res){
+                    self.dialogChangeFormVisible = false
+                    self.$message({message:'修改成功！', type: 'success'});
+                    self.getArticle()
                 });
             },
             current_change:function(currentPage){

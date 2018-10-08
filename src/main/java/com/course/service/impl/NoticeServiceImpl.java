@@ -21,6 +21,10 @@ public class NoticeServiceImpl implements NoticeService {
         return noticeDao.queryByStatus();
     }
 
+    public List<NoticePo> queryByName(String noticeName){
+        return  noticeDao.queryByName(noticeName);
+    }
+
     public void insertNotice(NoticePo po) {
         noticeDao.insertNotice(po);
     }

@@ -8,6 +8,7 @@ public interface NoticeDao {
     public List<NoticePo> queryAll();
 
     public List<NoticePo> queryByStatus();
+    public List<NoticePo> queryByName(String noticeName);
 
     public void insertNotice(NoticePo po);
 

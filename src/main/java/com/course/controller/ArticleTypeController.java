@@ -6,10 +6,7 @@ import com.course.pojo.UserPo;
 import com.course.service.ArticleTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
@@ -43,5 +40,15 @@ public class ArticleTypeController {
     @ResponseBody
     public List<ArticleTypePo> pageQueryAll(){
         return articleTypeService.pageQueryAll();
+    }
+    @RequestMapping(value = "/updateArticleType", method = RequestMethod.PUT)
+    @ResponseBody
+    public void changeType(@RequestBody ArticleTypePo po){
+         articleTypeService.updateById(po);
+    }
+    @RequestMapping(value = "/deleteById/{articleTypeId}", method = RequestMethod.GET)
+    @ResponseBody
+    public void delete(@PathVariable long articleTypeId){
+        articleTypeService.deleteArticleTypeById(articleTypeId);
     }
 }
